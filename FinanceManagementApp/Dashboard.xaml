@@ -1,0 +1,547 @@
+﻿<UserControl x:Class="FinanceManagementApp.Dashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinanceManagementApp"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:domain="clr-namespace:FinanceManagementApp.Domain"
+             xmlns:controls="clr-namespace:FinanceManagementApp"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             Width="1430"
+             Height="878">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MinHeight="80" />
+                <RowDefinition Height="245" />
+                <RowDefinition Height="400" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <local:UserHeader x:Name="userHeaderControl" Grid.ColumnSpan="2"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Content for column 1 -->
+                <!-- Start Balance card -->
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="20" Grid.Column="0" BorderBrush="Gray" BorderThickness="2">
+                    <materialDesign:Flipper materialDesign:ElevationAssist.Elevation="Dp0"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="320" Height="200">
+                        <materialDesign:Flipper.Clip>
+                            <RectangleGeometry Rect="0,0,320,200" RadiusX="20" RadiusY="20" />
+                        </materialDesign:Flipper.Clip>
+
+                        <materialDesign:Flipper.FrontContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Margin="0,-3,0,3">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 40, 0, 0">
+                                            <TextBlock Text="{Binding TotalBalance}" FontSize="40" FontWeight="DemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42">
+                                            <TextBlock Text="Total Balance" FontSize="30" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="29">
+                                            <TextBlock Text="This is your total balance" FontSize="18" FontWeight="Light"/>
+                                        </StackPanel>
+                                        <Button VerticalAlignment="Top" HorizontalAlignment="Right"
+                                            Foreground="Black"
+                                            Background="White"
+                                            BorderBrush="Black"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            Click="Button_ToBudget_Click"
+                                           Margin="0,6,2,0">
+                                            <materialDesign:PackIcon Width="30" Height="30" Kind="ArrowTopRight" />
+                                        </Button>
+                                    </Grid>
+                                    <ProgressBar IsIndeterminate="True" Margin="0,150,0,6"/>
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="72">
+                                        <Button Margin="0,4,0,0" Command="{x:Static materialDesign:Flipper.FlipCommand}" Content="MORE"
+                                Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.FrontContent>
+
+                        <materialDesign:Flipper.BackContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:ColorZone Padding="6" CornerRadius="20" Mode="SecondaryLight">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="Left" Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                    Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
+                                            </Button>
+                                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="Balance Details"/>
+                                        </StackPanel>
+                                    </materialDesign:ColorZone>
+                                    <Grid Grid.Row="1" Width="172" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                        <Border CornerRadius="15" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Border CornerRadius="15" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#E5FAE6"/>
+                                                            <Style.Triggers>
+                                                                <!-- Nếu balance giảm, đổi màu nền thành #FFEBEB -->
+                                                                <DataTrigger Binding="{Binding IsBalanceIncreased}" Value="False">
+                                                                    <Setter Property="Background" Value="#FFEBEB"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <!-- Mũi tên chỉ hướng tăng/giảm -->
+                                                        <materialDesign:PackIcon x:Name="ArrowIcon" VerticalAlignment="Center" Width="24" Height="24">
+                                                            <materialDesign:PackIcon.Style>
+                                                                <Style TargetType="materialDesign:PackIcon">
+                                                                    <Setter Property="Kind" Value="ArrowUp"/>
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu balance giảm, đổi thành mũi tên xuống và màu đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsBalanceIncreased}" Value="False">
+                                                                            <Setter Property="Kind" Value="ArrowDown"/>
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </materialDesign:PackIcon.Style>
+                                                        </materialDesign:PackIcon>
+
+                                                        <!-- Change percent of balance -->
+                                                        <TextBlock Text="{Binding BalanceChangePercentage, StringFormat={}{0:P2}}"
+                      FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu giảm, đổi màu văn bản thành đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsBalanceIncreased}" Value="False">
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Văn bản bổ sung "vs last month" -->
+                                                <TextBlock Text="vs last month" FontSize="16" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Border>
+                <!-- Start Income card -->
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="20" Grid.Column="1" BorderBrush="Gray" BorderThickness="2">
+                    <materialDesign:Flipper materialDesign:ElevationAssist.Elevation="Dp0"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Width="320" Height="200">
+                        <materialDesign:Flipper.Clip>
+                            <RectangleGeometry Rect="0,0,320,200" RadiusX="20" RadiusY="20" />
+                        </materialDesign:Flipper.Clip>
+
+                        <materialDesign:Flipper.FrontContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Margin="0,-3,0,3">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 40, 0, 0">
+                                            <TextBlock Text="{Binding TotalIncome}" FontSize="40" FontWeight="DemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42">
+                                            <TextBlock Text="Total Income" FontSize="30" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="29">
+                                            <TextBlock Text="This is your total income" FontSize="18" FontWeight="Light"/>
+                                        </StackPanel>
+                                        <Button VerticalAlignment="Top" HorizontalAlignment="Right"
+                                    Foreground="Black"
+                                    Background="White"
+                                    BorderBrush="Black"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                    Click="Button_ToBudget_Click"
+                                   Margin="0,6,2,0">
+                                            <materialDesign:PackIcon Width="30" Height="30" Kind="ArrowTopRight" />
+                                        </Button>
+                                    </Grid>
+                                    <ProgressBar IsIndeterminate="True" Margin="0,150,0,6"/>
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="72">
+                                        <Button Margin="0,4,0,0" Command="{x:Static materialDesign:Flipper.FlipCommand}" Content="MORE"
+                    Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.FrontContent>
+
+                        <materialDesign:Flipper.BackContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:ColorZone Padding="6" CornerRadius="20" Mode="SecondaryLight">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="Left" Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                        Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
+                                            </Button>
+                                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="Income Details"/>
+                                        </StackPanel>
+                                    </materialDesign:ColorZone>
+                                    <Grid Grid.Row="1" Width="172" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                        <Border CornerRadius="15" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Vertical">
+                                                <Border Background="#E5FAE6" CornerRadius="15" Height="40">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#E5FAE6"/>
+                                                            <Style.Triggers>
+                                                                <!-- Nếu balance giảm, đổi màu nền thành #FFEBEB -->
+                                                                <DataTrigger Binding="{Binding IsIncomeIncreased}" Value="False">
+                                                                    <Setter Property="Background" Value="#FFEBEB"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <!-- Mũi tên chỉ hướng tăng/giảm -->
+                                                        <materialDesign:PackIcon VerticalAlignment="Center" Width="24" Height="24">
+                                                            <materialDesign:PackIcon.Style>
+                                                                <Style TargetType="materialDesign:PackIcon">
+                                                                    <Setter Property="Kind" Value="ArrowUp"/>
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu income giảm, đổi thành mũi tên xuống và màu đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsIncomeIncreased}" Value="False">
+                                                                            <Setter Property="Kind" Value="ArrowDown"/>
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </materialDesign:PackIcon.Style>
+                                                        </materialDesign:PackIcon>
+
+                                                        <!-- Change percent of balance -->
+                                                        <TextBlock Text="{Binding IncomeChangePercentage, StringFormat={}{0:P2}}"
+          FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu giảm, đổi màu văn bản thành đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsIncomeIncreased}" Value="False">
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Văn bản bổ sung "vs last month" -->
+                                                <TextBlock Text="vs last month" FontSize="16" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Border>
+                <!-- Start Expense card -->
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="20" Grid.Column="2" BorderBrush="Gray" BorderThickness="2">
+                    <materialDesign:Flipper materialDesign:ElevationAssist.Elevation="Dp0"
+      HorizontalAlignment="Center" VerticalAlignment="Center"
+      Width="320" Height="200">
+                        <materialDesign:Flipper.Clip>
+                            <RectangleGeometry Rect="0,0,320,200" RadiusX="20" RadiusY="20" />
+                        </materialDesign:Flipper.Clip>
+
+                        <materialDesign:Flipper.FrontContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Margin="0,-3,0,3">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 40, 0, 0">
+                                            <TextBlock Text="{Binding TotalExpense}" FontSize="40" FontWeight="DemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42">
+                                            <TextBlock Text="Total Expense" FontSize="30" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="29">
+                                            <TextBlock Text="This is your total expense" FontSize="18" FontWeight="Light"/>
+                                        </StackPanel>
+                                        <Button VerticalAlignment="Top" HorizontalAlignment="Right"
+                          Foreground="Black"
+                          Background="White"
+                          BorderBrush="Black"
+                          Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                          Click="Button_ToBudget_Click"
+                         Margin="0,6,2,0">
+                                            <materialDesign:PackIcon Width="30" Height="30" Kind="ArrowTopRight" />
+                                        </Button>
+                                    </Grid>
+                                    <ProgressBar IsIndeterminate="True" Margin="0,150,0,6"/>
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="72">
+                                        <Button Margin="0,4,0,0" Command="{x:Static materialDesign:Flipper.FlipCommand}" Content="MORE"
+          Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.FrontContent>
+
+                        <materialDesign:Flipper.BackContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:ColorZone Padding="6" CornerRadius="20" Mode="SecondaryLight">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="Left" Command="{x:Static materialDesign:Flipper.FlipCommand}"
+              Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
+                                            </Button>
+                                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="Expense Details"/>
+                                        </StackPanel>
+                                    </materialDesign:ColorZone>
+                                    <Grid Grid.Row="1" Width="172" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                        <Border CornerRadius="15" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Vertical">
+                                                <Border CornerRadius="15" Height="40">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#E5FAE6"/>
+                                                            <Style.Triggers>
+                                                                <!-- Nếu balance giảm, đổi màu nền thành #FFEBEB -->
+                                                                <DataTrigger Binding="{Binding IsExpenseIncreased}" Value="True">
+                                                                    <Setter Property="Background" Value="#FFEBEB"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <!-- Mũi tên chỉ hướng tăng/giảm -->
+                                                        <materialDesign:PackIcon VerticalAlignment="Center" Width="24" Height="24">
+                                                            <materialDesign:PackIcon.Style>
+                                                                <Style TargetType="materialDesign:PackIcon">
+                                                                    <Setter Property="Kind" Value="ArrowDown"/>
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu income giảm, đổi thành mũi tên xuống và màu đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsExpenseIncreased}" Value="True">
+                                                                            <Setter Property="Kind" Value="ArrowUp"/>
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </materialDesign:PackIcon.Style>
+                                                        </materialDesign:PackIcon>
+
+                                                        <!-- Change percent of balance -->
+                                                        <TextBlock Text="{Binding ExpenseChangePercentage, StringFormat={}{0:P2}}"
+FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#297B32"/>
+                                                                    <Style.Triggers>
+                                                                        <!-- Nếu tang, đổi màu văn bản thành đỏ -->
+                                                                        <DataTrigger Binding="{Binding IsExpenseIncreased}" Value="True">
+                                                                            <Setter Property="Foreground" Value="#B83838"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <!-- Văn bản bổ sung "vs last month" -->
+                                                <TextBlock Text="vs last month" FontSize="16" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Border>
+                <!-- Start Expense card -->
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="20" Grid.Column="3" BorderBrush="Gray" BorderThickness="2">
+                    <materialDesign:Flipper materialDesign:ElevationAssist.Elevation="Dp0"
+      HorizontalAlignment="Center" VerticalAlignment="Center"
+      Width="320" Height="200">
+                        <materialDesign:Flipper.Clip>
+                            <RectangleGeometry Rect="0,0,320,200" RadiusX="20" RadiusY="20" />
+                        </materialDesign:Flipper.Clip>
+
+                        <materialDesign:Flipper.FrontContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Margin="0,-3,0,3">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 40, 0, 0">
+                                            <TextBlock Text="{Binding TotalCurrentSavingAmount}" FontSize="40" FontWeight="DemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42">
+                                            <TextBlock Text="Total Saving" FontSize="30" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="29">
+                                            <TextBlock Text="This is your total saving" FontSize="18" FontWeight="Light"/>
+                                        </StackPanel>
+                                        <Button VerticalAlignment="Top" HorizontalAlignment="Right"
+                          Foreground="Black"
+                          Background="White"
+                          BorderBrush="Black"
+                          Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                          Click="Button_ToBudget_Click"
+                         Margin="0,6,2,0">
+                                            <materialDesign:PackIcon Width="30" Height="30" Kind="ArrowTopRight" />
+                                        </Button>
+                                    </Grid>
+                                    <ProgressBar IsIndeterminate="True" Margin="0,150,0,6"/>
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="72">
+                                        <Button Margin="0,4,0,0" Command="{x:Static materialDesign:Flipper.FlipCommand}" Content="MORE"
+          Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.FrontContent>
+
+                        <materialDesign:Flipper.BackContent>
+                            <Border Background="#ECEAFF">
+                                <Grid Width="320" Height="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:ColorZone Padding="6" CornerRadius="20" Mode="SecondaryLight">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="Left" Command="{x:Static materialDesign:Flipper.FlipCommand}"
+              Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
+                                            </Button>
+                                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="Saving Details"/>
+                                        </StackPanel>
+                                    </materialDesign:ColorZone>
+                                    <Grid Grid.Row="1" Margin="0,40,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                        <Border CornerRadius="15" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Vertical">
+                                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <TextBlock Text="You need to save"></TextBlock>
+                                                </StackPanel>
+                                                <Border Background="#E5FAE6" CornerRadius="15" Height="40">
+                                                    <TextBlock Text="{Binding SavingNeeded}" FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0" Foreground="#297B32"></TextBlock>
+                                                </Border>
+                                                <!-- Văn bản bổ sung "vs last month" -->
+                                                <TextBlock Text="to reach your goal" FontSize="16" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Border>
+            </Grid>
+
+            <!-- Internal Grid, Cartesian chart row 3 -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Margin="15, 0, 0, 0">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42">
+                                <TextBlock Text="Money Flow" FontSize="30" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <lvc:CartesianChart Series="{Binding SeriesCollection}" Foreground="#8470FF" Height="343" Width="809">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="Month" Labels="{Binding Labels}" />
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Amount" LabelFormatter="{Binding YFormatter}" />
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Margin="15, 0, 15, 0">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="42" Orientation="Horizontal">
+                                <TextBlock Text="Budget Item" FontSize="30" FontWeight="SemiBold" Width="386"/>
+                                <Button
+        Foreground="Black"
+        Background="White"
+        BorderBrush="Black"
+        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+        Click="Button_ToBudget_Click">
+                                    <materialDesign:PackIcon Width="30" Height="30" Kind="ArrowTopRight" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid>
+                                    <!-- Pie chart (Donut chart) -->
+                                    <lvc:PieChart Series="{Binding BudgetSeriesCollection}" InnerRadius="100" LegendLocation="Bottom" Height="295">
+                                        <lvc:PieChart.DataTooltip>
+                                            <lvc:DefaultTooltip SelectionMode="OnlySender"/>
+                                        </lvc:PieChart.DataTooltip>
+                                    </lvc:PieChart>
+
+                                    <!-- Total Budget TextBlock -->
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Foreground="Gray" Text="Total Budget" Margin="0, 0, 0, 70"/>
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="Black" Text="{Binding FormatedTotalBudget}" />
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

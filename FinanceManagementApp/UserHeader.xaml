@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="FinanceManagementApp.UserHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinanceManagementApp"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="878" d:DesignWidth="1496">
+    <Grid >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Width" Value="30"></Setter>
+                    <Setter Property="Height" Value="30"></Setter>
+                </Style>
+            </Grid.Resources>
+
+            <Grid Grid.Column="0">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock x:Name="txtName" Margin="10,10,10,0" HorizontalAlignment="Left" FontWeight="Bold"
+                                   Text="Demo" FontSize="30"/>
+                    </Grid>
+                    <Grid>
+                        <TextBlock x:Name="txtSubtitle" Text="Demo2" FontSize="20"
+                                   Margin="10,0,10,10" HorizontalAlignment="Left" FontWeight="Bold" Foreground="Gray"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Column="1" VerticalAlignment="Top" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                    Foreground="#343438" BorderBrush="Gray" Background="{x:Null}" Margin="0,0,30,0">
+                        <materialDesign:PackIcon Kind="Magnify"/>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Foreground="#343438" BorderBrush="Gray" Background="{x:Null}">
+                        <StackPanel>
+                            <materialDesign:PackIcon Kind="Notifications"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Width="270" Height="54" Margin="30,0,0,0"
+                            materialDesign:ButtonAssist.CornerRadius="20"
+                            Foreground="#343438" BorderBrush="Gray" Background="{x:Null}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="217">
+                            <materialDesign:PackIcon Kind="AccountCircle" Margin="0,0,10,0"/>
+                            <TextBlock x:Name="txtUsername" VerticalAlignment="Center" FontSize="16" Width="177"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

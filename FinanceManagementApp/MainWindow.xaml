@@ -1,0 +1,29 @@
+﻿<Window x:Class="FinanceManagementApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinanceManagementApp"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:domain="clr-namespace:FinanceManagementApp.Domain"
+        xmlns:controls="clr-namespace:FinanceManagementApp"
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize"
+        mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="MainWindow">
+    <Grid Background="#F5F4FF">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar UserControl -->
+        <local:UserSidebar Grid.Column="0" SelectionChanged="OnSidebar_SelectionChanged"/>
+
+        <!-- ContentControl for dynamic content -->
+        <ContentControl x:Name="MainContent" Grid.Column="1"/>
+        
+    </Grid>
+</Window>

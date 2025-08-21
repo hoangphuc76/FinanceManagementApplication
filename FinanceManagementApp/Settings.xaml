@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="FinanceManagementApp.Settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinanceManagementApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20,0,20,20">
+                <!-- Pro Upgrade Section -->
+                <Border Background="#F5F5F5" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Text="Premium Features" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                        
+                        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,5">
+                                <Run FontWeight="SemiBold">Nâng cấp gói Pro</Run> để sử dụng thêm chức năng
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                                <Run FontStyle="Italic">Giá: 20,000 VND</Run>
+                            </TextBlock>
+                            <StackPanel Orientation="Vertical" Margin="0,5,0,0">
+                                <TextBlock Text="✓ Báo cáo chi tiết" Margin="0,2,0,2"/>
+                                <TextBlock Text="✓ Xuất báo cáo PDF" Margin="0,2,0,2"/>
+                                <TextBlock Text="✓ Phân tích chi tiêu nâng cao" Margin="0,2,0,2"/>
+                                <TextBlock Text="✓ Dự báo tài chính" Margin="0,2,0,2"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <Button x:Name="btnUpgradeToPro" Grid.Row="2" Content="Nâng cấp ngay" 
+                                Background="#4CAF50" Foreground="White" 
+                                Padding="15,8" HorizontalAlignment="Left"
+                                Click="btnUpgradeToPro_Click"/>
+                    </Grid>
+                </Border>
+                
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

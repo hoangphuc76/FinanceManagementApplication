@@ -1,0 +1,421 @@
+﻿<UserControl x:Class="FinanceManagementApp.BudgetManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FinanceManagementApp"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="878" d:DesignWidth="1496">
+    <Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Width" Value="30"></Setter>
+                    <Setter Property="Height" Value="30"></Setter>
+                </Style>
+            </Grid.Resources>
+
+            <local:UserHeader x:Name="userHeaderControl" Grid.ColumnSpan="2"/>
+            <Grid Grid.Column="0" VerticalAlignment="Top" Margin="10,90,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Foreground="#343438" BorderBrush="Gray"
+                            Background="{x:Null}">
+                                <materialDesign:PackIcon Kind="Calendar"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#343438" BorderBrush="Gray"
+                            Background="{x:Null}" Margin="0,0,20,0"
+                            materialDesign:ButtonAssist.CornerRadius="25" Width="150" Height="56">
+                                <TextBlock Text="This month" VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Foreground="#343438" BorderBrush="Gray"
+                            Background="{x:Null}">
+                                <materialDesign:PackIcon Kind="Sort"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#343438" BorderBrush="Gray"
+                            Background="{x:Null}" Margin="0,0,20,0"
+                            materialDesign:ButtonAssist.CornerRadius="25" Width="158" Height="56">
+                                <ComboBox HorizontalAlignment="Center" Width="117" materialDesign:HintAssist.Hint="Sort By: Defaut">
+                                    <ComboBoxItem>
+                                        <TextBlock Text="Sort By: Budget"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="Sort By: Create Date"/>
+                                    </ComboBoxItem>
+                                </ComboBox>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Foreground="#343438" BorderBrush="Gray"
+                            Background="{x:Null}">
+                                <materialDesign:PackIcon Kind="Tune"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="White" BorderBrush="Gray" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                CommandTarget="{Binding ElementName=AddNewBudget}"
+                        Margin="40,0,40,0" Background="#8470FF"
+                        materialDesign:ButtonAssist.CornerRadius="25" Height="56">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Plus"/>
+                                <TextBlock Text="Add New Budget" VerticalAlignment="Center" TextAlignment="Right" FontSize="16" FontWeight="DemiBold" Width="130"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#343438" BorderBrush="Gray"
+                        Background="{x:Null}" Margin="0,0,20,0"
+                        materialDesign:ButtonAssist.CornerRadius="25" Width="158" Height="56">
+                            <ComboBox HorizontalAlignment="Center" Width="117" materialDesign:HintAssist.Hint="Status">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Status1"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Status2"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#343438" BorderBrush="Gray"
+                        Background="{x:Null}" Margin="0,0,20,0"
+                        materialDesign:ButtonAssist.CornerRadius="25" Width="158" Height="56">
+                            <ComboBox HorizontalAlignment="Center" Width="117" materialDesign:HintAssist.Hint="Amount">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Amount1"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Amount2"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#8470FF" BorderBrush="{x:Null}"
+                        Background="{x:Null}" Margin="0,0,20,0" 
+                        materialDesign:ButtonAssist.CornerRadius="25" Width="150" Height="56">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Restore"/>
+                                <TextBlock Text="Reset all" VerticalAlignment="Center" TextAlignment="Right" FontSize="16" FontWeight="DemiBold" Width="77"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <StackPanel Margin="10,10,0,10" Orientation="Horizontal">
+                        <TextBlock x:Name="txtNumberOfBudget" FontSize="15" FontWeight="DemiBold" Foreground="Gray"/>
+                        <TextBlock Text=" Items" FontSize="15" FontWeight="DemiBold" Foreground="Gray"/>
+                    </StackPanel>
+                </Grid>
+
+                <WrapPanel Grid.Row="3">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              CanContentScroll="True"
+                              HorizontalScrollBarVisibility="Disabled">
+                        <ListBox x:Name="lbBudget" Height="Auto">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel HorizontalAlignment="Center" Margin="20" Width="400">
+                                        <materialDesign:Card UniformCornerRadius="15" Background="#F5F4FF" BorderBrush="Gray" Width="400">
+                                            <StackPanel Orientation="Vertical">
+                                                <Grid>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                                                        <TextBlock Text="{Binding BudgetName}" FontWeight="Bold" FontSize="25"
+                                                            Height="38" Width="330"/>
+                                                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Height="35" Width="35" 
+                                                                 Foreground="#8470FF" Background="{x:Null}" BorderBrush="#D0D0D4" 
+                                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                                CommandTarget="{Binding ElementName=UpdateBudget}" >
+                                                            <materialDesign:PackIcon Kind="PenMinus" Height="25" Width="25" HorizontalAlignment="Center"/>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Grid.Column="0">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="5*"/>
+                                                            <RowDefinition Height="17*"/>
+                                                        </Grid.RowDefinitions>
+                                                        <lvc:Gauge Margin="5" Height="150" 
+                                           GaugeActiveFill="#8470FF" GaugeBackground="#ECEAFF"
+                                           InnerRadius="65"
+                                           Uses360Mode="True"
+                                           From="0" To="100" Value="{Binding ExpensePercent}" Grid.RowSpan="2"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*"/>
+                                                            <RowDefinition Height="*"/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <Grid Grid.Row="0" Margin="0,-2,0,2">
+                                                            <TextBlock Text="Left" Foreground="#D0D0D4" FontWeight="DemiBold" FontSize="18" Margin="0,21,0,-31"/>
+                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                                                <TextBlock Text="{Binding CurrentAmountStr}" Foreground="Black" FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                                                                <TextBlock Text="đ" Foreground="Black" FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                                                                <TextBlock Text="/" Foreground="#8470FF" FontSize="12" VerticalAlignment="Bottom" 
+FontWeight="DemiBold"/>
+                                                                <TextBlock Text="{Binding LimitAmountStr}" Foreground="#8470FF" FontSize="12" VerticalAlignment="Bottom" 
+                                               FontWeight="DemiBold"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="1">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                                <materialDesign:PackIcon Kind="CheckboxMarkedCircle" Height="25" Width="25"
+                                                             Foreground="#297B32" Margin="0,0,5,0"/>
+                                                                <TextBlock Text="{Binding BudgetStatus}" FontSize="18" FontWeight="DemiBold" Foreground="#297B32"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </StackPanel>
+                                        </materialDesign:Card>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </WrapPanel>
+            </Grid>
+
+            <Grid Grid.Column="1" VerticalAlignment="Top" Margin="10,90,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="1" Grid.Row="0" Margin="10" Grid.RowSpan="2">
+                    <WrapPanel HorizontalAlignment="Center" Margin="10" Width="450">
+                        <materialDesign:Card UniformCornerRadius="15" Background="#F5F4FF" BorderBrush="Gray">
+                            <StackPanel Orientation="Vertical">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                                        <TextBlock Text="Monthly Budget" FontWeight="Bold" FontSize="30"
+                                    Height="40" Width="400"/>
+                                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Height="30" Width="30" 
+                                        Foreground="Black" Background="{x:Null}" BorderBrush="#D0D0D4">
+                                            <materialDesign:PackIcon Kind="DotsHorizontal" Height="20" Width="20" HorizontalAlignment="Center"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,30" Grid.RowSpan="2">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
+                                            <TextBlock x:Name="txtTotalCurrentExpense" Foreground="Black" FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                                            <TextBlock Text="đ" Foreground="Black" FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                                            <TextBlock Text="/" Foreground="#8470FF" FontSize="12" VerticalAlignment="Bottom" 
+FontWeight="DemiBold"/>
+                                            <TextBlock x:Name="txtTotalExpsense" Foreground="#8470FF" FontSize="12" VerticalAlignment="Bottom" 
+FontWeight="DemiBold"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,50,0,0">
+                                            <materialDesign:PackIcon Kind="CheckboxMarkedCircle" Height="25" Width="25"
+                                        Foreground="#297B32"/>
+                                            <TextBlock x:Name="txtStatusMonthly" Text="on track" FontSize="18" FontWeight="DemiBold" Foreground="#297B32" 
+                                                   Height="156" Width="80"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                        <lvc:Gauge VerticalAlignment="Bottom" Height="150"
+                                       GaugeActiveFill="#8470FF" GaugeBackground="#ECEAFF"
+                                       InnerRadius="80"
+                                        Uses360Mode="False"
+                                        From="0" To="100" x:Name="txtTotalExpensePercent"/>
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </WrapPanel>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="1" Margin="0,154,0,-154">
+                    <WrapPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10" Width="450">
+                        <materialDesign:Card UniformCornerRadius="15" Background="#F5F4FF" BorderBrush="Gray">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Width="452">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                    </Grid>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="Most Expense" Margin="10 20" FontSize="25" FontWeight="Bold" Width="290"/>
+                                    </Grid>
+
+                                    <Grid Grid.Column="1">
+                                        <Button Style="{StaticResource MaterialDesignOutlinedLightButton}" Foreground="#343438" BorderBrush="Gray"
+                                        Background="{x:Null}" Margin="0,0,20,0" HorizontalAlignment="Right"
+                                        materialDesign:ButtonAssist.CornerRadius="25" Width="132" Height="40">
+                                            <ComboBox HorizontalAlignment="Center" Width="100" materialDesign:HintAssist.Hint="This month">
+                                                <ComboBoxItem>
+                                                    <TextBlock Text="This week"/>
+                                                </ComboBoxItem>
+                                                <ComboBoxItem>
+                                                    <TextBlock Text="This year"/>
+                                                </ComboBoxItem>
+                                            </ComboBox>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" BorderBrush="#D6D2FF"
+                                            Background="#D6D2FF" Margin="5">
+                                                <materialDesign:PackIcon Kind="BankTransfer" Foreground="#8470FF" VerticalAlignment="Center"/>
+                                            </Button>
+                                        </Grid>
+                                        <Grid Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5">
+                                                <TextBlock Text="$2500" FontSize="20" FontWeight="DemiBold" Foreground="#343438"/>
+                                                <TextBlock Text="Money Transfer" FontSize="20" FontWeight="DemiBold" Foreground="#82828C"/>
+                                            </StackPanel>
+                                            <Border Grid.Column="2" Margin="40,10" CornerRadius="15" Background="#FFEBEB">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="ArrowUp" VerticalAlignment="Center" Foreground="#E83838"/>
+                                                    <TextBlock Text="15.6%" FontSize="25" FontWeight="DemiBold" Foreground="#E83838" VerticalAlignment="Center" Width="67"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Button Style="{StaticResource MaterialDesignFloatingActionButton}" BorderBrush="#D6D2FF"
+                                            Background="#D6D2FF" Margin="5">
+                                                <materialDesign:PackIcon Kind="HeartPulse" Foreground="#8470FF" VerticalAlignment="Center"/>
+                                            </Button>
+                                        </Grid>
+                                        <Grid Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5">
+                                                <TextBlock Text="$235" FontSize="20" FontWeight="DemiBold" Foreground="#343438"/>
+                                                <TextBlock Text="Health And Beauty" FontSize="20" FontWeight="DemiBold" Foreground="#82828C"/>
+                                            </StackPanel>
+                                            <Border Grid.Column="2" Margin="40,10" CornerRadius="15" Background="#E5FAE6">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="ArrowDown" VerticalAlignment="Center" Foreground="#297B32"/>
+                                                    <TextBlock Text="25.3%" FontSize="25" FontWeight="DemiBold" Foreground="#297B32" VerticalAlignment="Center" Width="67"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </WrapPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <materialDesign:DialogHost x:Name="AddNewBudget" >
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="40">
+                    <TextBlock Text="Add New Budget" FontWeight="Bold" FontSize="25" Foreground="#8470FF" Margin="0,0,0,10" TextAlignment="Center" />
+
+                    <TextBox x:Name="txtBudgetName" Width="350" materialDesign:HintAssist.Hint="Budget Name" FontSize="20" Margin="0,20,0,20" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBox x:Name="txtBudgetLimit" Width="350" materialDesign:HintAssist.Hint="Budget Limit" FontSize="20"  Margin="0,20,0,20" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Add" FontSize="19" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{StaticResource MaterialDesignFlatButton}" />
+                        <Button Content="Cancel" FontSize="19" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{StaticResource MaterialDesignFlatButton}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        
+        <materialDesign:DialogHost x:Name="UpdateBudget" >
+            <materialDesign:DialogHost.DialogContent>
+              
+                    <StackPanel Margin="40">
+                    <TextBlock Text="Update Budget" FontWeight="Bold" FontSize="25" Foreground="#8470FF" Margin="0,0,0,10" TextAlignment="Center" />
+
+                    <TextBox x:Name="txtBudgetNameUpdate" Width="350" materialDesign:HintAssist.Hint="Budget Name" FontSize="20" Margin="0,20,0,10" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBox x:Name="txtBudgetLimitUpdate" Width="350" materialDesign:HintAssist.Hint="Budget Limit" FontSize="20"  Margin="0,20,0,20" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Add" FontSize="19" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{StaticResource MaterialDesignFlatButton}" />
+                        <Button Content="Cancel" FontSize="19" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{StaticResource MaterialDesignFlatButton}" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>
