@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using DataAccessLayer;
 using FinanceManagementApp.Domain;
 using Services;
 using System;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FinanceManagementApp
 {
@@ -24,6 +26,7 @@ namespace FinanceManagementApp
     public partial class BudgetManagement : UserControl
     {
         private readonly IBudgetService _service;
+        private int currentBudgetId;
         public BudgetManagement()
         {
             InitializeComponent();
@@ -48,6 +51,61 @@ namespace FinanceManagementApp
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        private void btn_openUpdateDialog(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var budget = button.Tag as BudgetItem;
+            
+            currentBudgetId = budget.Id;
+            txtBudgetNameUpdate.Text = budget.BudgetName;
+            txtBudgetLimitUpdate.Text = budget.LimitAmount.ToString();
+            UpdateBudget.IsOpen = true;
+        }
+
+        private void btn_updateBudget(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var budget = new BudgetItem
+                {
+                    Id = currentBudgetId,
+                    UserId = UserSession.Instance.Id,
+                    BudgetName = txtBudgetNameUpdate.Text.ToString(),
+                    LimitAmount = Int32.Parse(txtBudgetLimitUpdate.Text.ToString()),
+                };
+                BudgetItemDAO.UpdateBudget(budget);
+                MessageBox.Show("Update budget successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                loadBudgets();
+            }
+        }
+
+        private void btn_createBudget(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var budget = new BudgetItem
+                {
+                    UserId = UserSession.Instance.Id,
+                    BudgetName = txtBudgetName.Text.ToString(),
+                    LimitAmount = Int32.Parse(txtBudgetLimit.Text.ToString()),
+                };
+                BudgetItemDAO.CreateNewBudget(budget);
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            } 
+            finally
+            {
+                loadBudgets();
             }
         }
     }
