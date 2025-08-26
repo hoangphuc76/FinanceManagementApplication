@@ -27,6 +27,9 @@ namespace Services
         public IncomeSource GetIncomeSourceById(int id)
             => IncomeSourceDAO.GetIncomeSourceById(id);
 
+        public int? GetIncomeIdByIncomeName(string name)
+            => IncomeSourceDAO.GetIncomeIdByIncomeName(name);
+
         public List<IncomeSource> GetIncomeSources()
             => IncomeSourceDAO.GetIncomeSources();
         public IncomeTransaction GetIncomeTransactionById(int id)

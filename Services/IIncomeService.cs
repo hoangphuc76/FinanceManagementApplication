@@ -15,6 +15,7 @@ namespace Services
         void DeleteIncomeSource(IncomeSource incomeSource);
         List<IncomeSource> GetIncomeSources();
         IncomeSource GetIncomeSourceById(int id);
+        int? GetIncomeIdByIncomeName(string name);
 
         //Function for Income Transaction
         void CreateIncomeTransaction(IncomeTransaction incomeTransaction);
@@ -22,5 +23,6 @@ namespace Services
         void DeleteIncomeTransaction(IncomeTransaction incomeTransaction);
         List<IncomeTransaction> GetIncomeTransactions(int userId);
         IncomeTransaction GetIncomeTransactionById(int id);
+        
     }
 }

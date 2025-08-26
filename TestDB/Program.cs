@@ -25,8 +25,13 @@ namespace TestDB
             //{
             //    Console.WriteLine(expenseTransaction.Amount);
             //}
-            var user = BudgetItemDAO.GetBudgetItems(3);
-
+            //var user = BudgetItemDAO.GetBudgetItems(3);
+            IncomeService incomeService = new IncomeService();
+            Lazy<List<IncomeTransaction>> incomeTransactions = new Lazy<List<IncomeTransaction>>(() => incomeService.GetIncomeTransactions(2));
+            foreach (var incomeTransaction in incomeTransactions.Value)
+            {
+                Console.WriteLine(incomeTransaction.Amount);
+            }
 
         }
     }

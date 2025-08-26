@@ -77,5 +77,21 @@ namespace DataAccessLayer
                 throw new Exception(ex.Message);
             }
         }
+        public static int? GetIncomeIdByIncomeName(string incomeName)
+        {
+            try
+            {
+                using var context = new FinanceManagementApplicationContext();
+                var incomeSource = context.IncomeSources
+                                          .FirstOrDefault(s => s.SourceName == incomeName && (s.IsDelete == null || s.IsDelete == false));
+
+                return incomeSource?.Id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
