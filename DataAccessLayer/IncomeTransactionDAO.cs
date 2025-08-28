@@ -38,7 +38,7 @@ namespace DataAccessLayer
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Error: {ex.Message}\nInner Exception: {ex.InnerException?.Message}");
             }
         }
 

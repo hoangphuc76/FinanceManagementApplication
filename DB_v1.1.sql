@@ -81,6 +81,9 @@ CREATE TABLE [IncomeTransaction] (
     CONSTRAINT FK_IncomeTransaction_IncomeSource FOREIGN KEY ([sourceId]) REFERENCES [IncomeSource]([id])
 );
 
+ALTER TABLE IncomeTransaction
+ADD Id INT IDENTITY(1,1) PRIMARY KEY;
+
 CREATE TABLE [BudgetItem] (
     [id] INT IDENTITY(1, 1) PRIMARY KEY,
     [userId] INT,

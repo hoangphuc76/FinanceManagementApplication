@@ -33,7 +33,7 @@ public partial class FinanceManagementApplicationContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=PHUC;Database=FinanceManagementApplication;User Id=sa;Password=123123;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=Sugar;Database=FinanceManagementApplication;TrustServerCertificate=True;Trusted_Connection=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -124,14 +124,13 @@ public partial class FinanceManagementApplicationContext : DbContext
 
         modelBuilder.Entity<IncomeTransaction>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("IncomeTransaction", tb =>
-                {
-                    tb.HasTrigger("trg_UpdateBalanceAfterIncomeDelete");
-                    tb.HasTrigger("trg_UpdateBalanceAfterIncomeInsert");
-                });
-
+            entity.ToTable("IncomeTransaction", tb =>
+            {
+                tb.HasTrigger("trg_UpdateBalanceAfterIncomeDelete");
+                tb.HasTrigger("trg_UpdateBalanceAfterIncomeInsert");
+            });
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("Id"); 
             entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.SourceId).HasColumnName("sourceId");

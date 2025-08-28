@@ -87,7 +87,7 @@ namespace FinanceManagementApp
                 Id = Int32.Parse(txtUpExpenseId.Text),
                 UserId = 1,
                 BudgetId = (int)cbUpBudget.SelectedValue,
-                Amount = Int32.Parse(txtUpAmount.Text),
+                Amount = Decimal.Parse(txtUpAmount.Text),
                 Note = txtUpNote.Text,
                 Date = dpUpTransactionDate.SelectedDate
             };

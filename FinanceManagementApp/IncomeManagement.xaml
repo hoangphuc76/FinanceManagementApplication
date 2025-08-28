@@ -4,9 +4,187 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FinanceManagementApp"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Income Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        
+        <materialDesign:DialogHost
+            DialogClosing="Sample1_DialogHost_OnDialogClosing"
+            DialogTheme="Inherit"
+            x:Name="AddDialogHost">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16">
+                    <TextBlock
+                        Text="Add a New Income Transaction"
+                        FontWeight="Bold"
+                        FontSize="16"
+                        Foreground="#8470FF"
+                        Margin="0,0,0,10"
+                        TextAlignment="Center" />
+
+                    <TextBox x:Name="txtAmount" Margin="0,8,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Amount" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                    <TextBox x:Name="txtSourceName" Margin="0,8,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Source Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                    <DatePicker x:Name="dpTransactionDate" Width="350" Margin="0,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Transaction Date" Style="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                        <!-- ... DatePicker.Resources giữ nguyên ... -->
+                    </DatePicker>
+
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Margin="0,8,8,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="ACCEPT" IsDefault="True" Click="btnCreateIncome" Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">True</system:Boolean>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Margin="0,8,8,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="CANCEL" IsCancel="True" Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">False</system:Boolean>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+
+            <!-- Trigger Button -->
+            <Border MinHeight="256" BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1" ClipToBounds="True">
+                <Grid Margin="0,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Margin="0,88,127,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#8470FF" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Content="{materialDesign:PackIcon Kind=Plus, Size=22}" Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}" BorderBrush="#FF8470FF" Foreground="White" />
+                </Grid>
+            </Border>
+        </materialDesign:DialogHost>
+
+        <!-- UPDATE DIALOG -->
+        <materialDesign:DialogHost x:Name="UpdateDialogHost">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16">
+                    <TextBlock Text="Update Income Transaction" FontWeight="Bold" FontSize="16" Foreground="#8470FF" Margin="0,0,0,10" TextAlignment="Center" />
+                    <TextBox x:Name="txtUpIncomeId" Margin="0,8,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False" Visibility="Collapsed" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox x:Name="txtUpAmount" Margin="0,8,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Amount" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox x:Name="txtUpSourceName" Margin="0,8,0,0" Width="350" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Source Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <DatePicker x:Name="dpUpTransactionDate" Width="350" Margin="0,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Transaction Date" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,15,8,0">
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="Cancel" IsDefault="True" Style="{StaticResource MaterialDesignFlatButton}">
+                            <Button.CommandParameter>
+                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">False</system:Boolean>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="Update" IsCancel="True" Style="{StaticResource MaterialDesignFlatButton}" Click="btnUpdateIncome"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <!-- DELETE DIALOG -->
+        <materialDesign:DialogHost x:Name="DeleteDialogHost">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="16">
+                    <TextBlock Text="Are you sure you want to delete this transaction?" FontWeight="Bold" FontSize="16" Foreground="Red" Margin="0,0,0,10" TextAlignment="Center" />
+                    <TextBlock x:Name="txtDelIncomeId" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Visibility="Collapsed" TextAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Yes" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="True" Click="btnDelIncome" Style="{StaticResource MaterialDesignFlatButton}" />
+                        <Button Content="No" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="False" Style="{StaticResource MaterialDesignFlatButton}" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        
+        <!-- ========== FILTER BAR ========== -->
+        <StackPanel Orientation="Horizontal" Margin="100,100,100,0" VerticalAlignment="Top">
+            <DatePicker x:Name="dpStartDate"
+                    Width="150"
+                    Margin="0,0,10,0"
+                    materialDesign:HintAssist.Hint="Start Date"/>
+            <DatePicker x:Name="dpEndDate"
+                    Width="150"
+                    Margin="0,0,10,0"
+                    materialDesign:HintAssist.Hint="End Date"/>
+            <ComboBox x:Name="cbSourceFilter"
+                  Width="200"
+                  Margin="0,0,10,0"
+                  DisplayMemberPath="SourceName"
+                  SelectedValuePath="Id"
+                  materialDesign:HintAssist.Hint="Source Name"/>
+            <Button x:Name="btnFindIncome"
+        Content="Find"
+        Width="80"
+        Margin="0,0,10,0"
+        Background="#8470FF"
+        Foreground="White"
+        Click="btnFind_Click"/>
+
+            <Button x:Name="btnResetIncome"
+            Content="Reset"
+            Width="80"
+            Background="Gray"
+            Foreground="White"
+            Click="btnReset_Click"/>
+        </StackPanel>
+
+        <!-- ========== DATAGRID ========== -->
+        <DataGrid
+        AutoGenerateColumns="False"
+        x:Name="dgIncomeTransactions"
+        CanUserAddRows="False"
+        HeadersVisibility="All"
+        ItemsSource="{Binding IncomeTransaction}"
+        Margin="101,176,116,52"
+        RowBackground="White" 
+        AlternatingRowBackground="White" 
+        Background="White"
+        SelectionMode="Extended"
+        SelectionUnit="Cell"
+        Width="Auto"
+        SelectionChanged="dgIncomeTransactions_SelectionChanged">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#ECEAFF" />
+                    <Setter Property="Foreground" Value="#8470FF" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="BorderBrush" Value="#ECEAFF"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="20,0,10,0" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="1*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Source Name" Binding="{Binding Source.SourceName}" Width="1*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="1*" IsReadOnly="True" />
+                <DataGridTemplateColumn Header="Actions" Width="1*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                Content="Update"
+                                Background="#8470FF"
+                                Foreground="White"
+                                Margin="0,0,5,0"
+                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                Tag="{Binding}"
+                                Click="btnUpIncomeSelectionChange"
+                                CommandTarget="{Binding ElementName=UpdateDialogHost}" />
+                                <Button
+                                Content="Delete"
+                                Background="#E83838"
+                                Foreground="White"
+                                Tag="{Binding Id}"
+                                Click="btnDelIncomeSelectionChange"
+                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                CommandTarget="{Binding ElementName=DeleteDialogHost}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+       
+
     </Grid>
 </UserControl>
